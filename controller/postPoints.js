@@ -32,7 +32,7 @@ exports.signin = async (req, res) => {
       secure: true, // Recommended for cookies transmitted over HTTPS
       SameSite: "None", // Allow the cookie to be sent with cross-site requests
     };
-    return res.cookie("token", token).send({
+    return res.cookie("token", token, cookieOptions).send({
       code: 200,
       status: "success",
       message: "signin success",
