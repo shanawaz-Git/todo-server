@@ -30,7 +30,7 @@ exports.signin = async (req, res) => {
     const cookieOptions = {
       httpOnly: false, // Recommended for sensitive cookies
       secure: true, // Recommended for cookies transmitted over HTTPS
-      sameSite: "None", // Allow the cookie to be sent with cross-site requests
+      SameSite: "None", // Allow the cookie to be sent with cross-site requests
     };
     return res.cookie("token", token).send({
       code: 200,
