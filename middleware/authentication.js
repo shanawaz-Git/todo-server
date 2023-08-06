@@ -31,7 +31,11 @@ function checkForAuthenticationCookie(cookieName) {
 }
 
 function errorHandler(err, req, res, next) {
-  res.status(500).json({ error: err });
+  res.status(500).json({
+    code: 500,
+    status: "failure",
+    error: err,
+  });
 }
 
 module.exports = {
