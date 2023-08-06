@@ -20,7 +20,7 @@ const app = express();
 const PORT = process.env.PORT || 5015;
 //----
 const corsOptions = {
-  origin: "http://127.0.0.1:5500", // Replace with your frontend domain
+  origin: "https://todo-front-one.vercel.app", // Replace with your frontend domain
   credentials: true, // Allow credentials (cookies, HTTP authentication, etc.)
 };
 app.use(cors(corsOptions));

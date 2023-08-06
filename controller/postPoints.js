@@ -34,6 +34,8 @@ exports.signin = async (req, res) => {
     });
   } catch (error) {
     return res.send({
+      code: 400,
+      status: "failure",
       error: "Incorrect Email or Password",
     });
   }
