@@ -49,7 +49,7 @@ exports.signin = async (req, res) => {
 exports.todoPost = async (req, res) => {
   try {
     var { title, category, summary, state, sys_id } = req.body;
-    if (!title || !category || !summary || !state) {
+    if (!title || !category || !summary) {
       return res.send({
         error:
           "please fill all the mandatory fields (title,category,summary,state)",
