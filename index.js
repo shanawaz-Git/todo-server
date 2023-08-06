@@ -19,7 +19,12 @@ const {
 const app = express();
 const PORT = process.env.PORT || 5015;
 //----
-app.use(cors());
+const corsOptions = {
+  origin: "http://127.0.0.1:5500", // Replace with your frontend domain
+  credentials: true, // Allow credentials (cookies, HTTP authentication, etc.)
+};
+app.use(cors(corsOptions));
+//----
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
