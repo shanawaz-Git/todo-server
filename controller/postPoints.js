@@ -66,20 +66,30 @@ exports.todoPost = async (req, res) => {
                 })
                 .then(() => {
                   return res.send({
-                    message: "success",
+                    code: 200,
+                    status: "success",
+                    message: "todo updated",
                   });
                 });
             } else {
-              return res.send({ message: "data up-to-date" });
+              return res.send({
+                code: 200,
+                status: "success",
+                message: "data up-to-date",
+              });
             }
           } else {
             return res.send({
+              code: 202,
+              status: "failure",
               error: "ID may not be empty",
             });
           }
         })
         .catch((e) => {
           return res.send({
+            code: 400,
+            status: "failure",
             error: e,
           });
         });
@@ -95,17 +105,23 @@ exports.todoPost = async (req, res) => {
         .save()
         .then(async () => {
           return res.send({
+            code: 200,
+            status: "success",
             message: "todo added successfully",
           });
         })
         .catch((e) => {
           return res.send({
+            code: 400,
+            status: "failure",
             error: e,
           });
         });
     }
   } catch (e) {
     return res.send({
+      coed: 401,
+      status: "failure",
       error: "error" + e,
     });
   }
