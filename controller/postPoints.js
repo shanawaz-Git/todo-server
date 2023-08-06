@@ -27,7 +27,11 @@ exports.signin = async (req, res) => {
       return res.send({ error: "email/password cannot be emppty" });
     }
     const token = await User.matchPasswordAndGenerateToken(email, password);
-    return res.cookie("token", token).redirect("/");
+    return res.cookie("token", token).send({
+      code: 200,
+      status: "success",
+      message: "signin success",
+    });
   } catch (error) {
     return res.send({
       error: "Incorrect Email or Password",
