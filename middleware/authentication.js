@@ -14,7 +14,7 @@ function checkForAuthenticationCookie(cookieName) {
     }
     const tokenCookieValue = req.cookies[cookieName];
     if (!tokenCookieValue) {
-      return next("token cannot be empty");
+      return next("token cannot be empty" + currentPath);
     }
 
     try {
