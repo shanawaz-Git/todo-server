@@ -23,6 +23,10 @@ const corsOptions = {
   origin: "https://todo-front-one.vercel.app", // Replace with your frontend domain
   credentials: true, // Allow credentials (cookies, HTTP authentication, etc.)
 };
+// const corsOptions = {
+//   origin: "http://127.0.0.1:5500", // Replace with your frontend domain
+//   credentials: true, // Allow credentials (cookies, HTTP authentication, etc.)
+// };
 app.use(cors(corsOptions));
 //----
 app.use(express.urlencoded({ extended: false }));

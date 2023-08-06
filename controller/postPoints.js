@@ -27,6 +27,11 @@ exports.signin = async (req, res) => {
       return res.send({ error: "email/password cannot be emppty" });
     }
     const token = await User.matchPasswordAndGenerateToken(email, password);
+    const cookieOptions = {
+      httpOnly: false, // Recommended for sensitive cookies
+      secure: true, // Recommended for cookies transmitted over HTTPS
+      sameSite: "None", // Allow the cookie to be sent with cross-site requests
+    };
     return res.cookie("token", token).send({
       code: 200,
       status: "success",
