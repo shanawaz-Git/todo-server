@@ -4,6 +4,8 @@ const JWT = require("jsonwebtoken");
 
 require("dotenv").config();
 const secret = process.env.SECRET;
+const jwttimeout = process.env.JWTTIMEOUTINSECONDS;
+var options = {};
 
 function createTokenForUser(user) {
   const payload = {
@@ -12,7 +14,12 @@ function createTokenForUser(user) {
     profileImageURL: user.profileImageURL,
     role: user.role,
   };
-  const token = JWT.sign(payload, secret);
+  if (jwttimeout) {
+    options = {
+      expiresIn: jwttimeout,
+    };
+  }
+  const token = JWT.sign(payload, secret, options);
   return token;
 }
 
