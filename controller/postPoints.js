@@ -11,13 +11,26 @@ exports.signup = async (req, res) => {
       password,
     });
   } catch (error) {
+    if (error.code == 11000) {
+      return res.send({
+        code: 400,
+        status: "failure",
+        error: "User already exist",
+      });
+    }
     return res.send(error);
   }
-  return res.redirect("/");
+  return res.send({
+    code: 200,
+    status: "success",
+    message: "signup success",
+  });
 };
 
 exports.logout = async (req, res) => {
-  res.clearCookie("token").redirect("/");
+  res
+    .clearCookie("token")
+    .send({ code: 200, status: "success", message: "logout success" });
 };
 
 exports.signin = async (req, res) => {
