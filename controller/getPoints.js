@@ -11,6 +11,7 @@ exports.home = (req, res, next) => {
 
 exports.todoget = async (req, res) => {
   try {
+    var restodolist = {};
     var { role, _id, email } = req.user;
     await todo
       .find(
@@ -30,12 +31,24 @@ exports.todoget = async (req, res) => {
             message: `No todos available`,
           });
         } else {
+          data.forEach((todo) => {
+            const category = todo.category;
+            // if (!restodolist[category]) {
+            //   restodolist[category] = [];
+            // }
+            // restodolist[category].push(todo);
+            if (!restodolist[category]) {
+              restodolist[category] = { category, data: [] };
+            }
+            restodolist[category].data.push(todo);
+          });
+          const resultArray = Object.values(restodolist);
           return res.send({
             code: 200,
             status: "Success",
             message: `success`,
             count: data.length,
-            data: data,
+            data: resultArray,
           });
         }
       });
