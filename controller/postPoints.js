@@ -15,10 +15,14 @@ exports.signup = async (req, res) => {
       return res.status(400).send({
         code: 400,
         status: "failure",
-        error: "User already exist",
+        message: "User already exist",
       });
     }
-    return res.send(error);
+    return res.status(400).send({
+      code: 400,
+      status: "failure",
+      message: "error" + error,
+    });
   }
   return res.status(200).send({
     code: 200,
@@ -38,9 +42,11 @@ exports.signin = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      return res
-        .status(400)
-        .send({ message: "email/password cannot be emppty" });
+      return res.status(400).send({
+        code: 400,
+        status: "failure",
+        message: "email/password cannot be empty",
+      });
     }
     const token = await User.matchPasswordAndGenerateToken(email, password);
     const cookieOptions = {
@@ -57,7 +63,7 @@ exports.signin = async (req, res) => {
     return res.status(400).send({
       code: 400,
       status: "failure",
-      error: "Incorrect Email or Password",
+      message: "Incorrect Email or Password",
     });
   }
 };
@@ -111,7 +117,7 @@ exports.todoPost = async (req, res) => {
             return res.status(202).send({
               code: 202,
               status: "failure",
-              error: "ID may not be empty",
+              message: "ID may not be empty",
             });
           }
         })
@@ -119,7 +125,7 @@ exports.todoPost = async (req, res) => {
           return res.status(400).send({
             code: 400,
             status: "failure",
-            error: e,
+            message: e,
           });
         });
     } else {
@@ -143,7 +149,7 @@ exports.todoPost = async (req, res) => {
           return res.status(400).send({
             code: 400,
             status: "failure",
-            error: e,
+            message: e,
           });
         });
     }
@@ -151,7 +157,7 @@ exports.todoPost = async (req, res) => {
     return res.status(401).send({
       coed: 401,
       status: "failure",
-      error: "error" + e,
+      message: "error" + e,
     });
   }
 };

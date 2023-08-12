@@ -46,7 +46,7 @@ exports.todoget = async (req, res) => {
           return res.send({
             code: 200,
             status: "Success",
-            message: `success`,
+            message: `todos available for ` + req.user.email,
             count: data.length,
             data: resultArray,
           });
@@ -54,7 +54,9 @@ exports.todoget = async (req, res) => {
       });
   } catch (e) {
     return res.send({
-      error: "error" + e,
+      code: 400,
+      status: "failure",
+      message: "error" + e,
     });
   }
 };
