@@ -12,7 +12,7 @@ exports.signup = async (req, res) => {
     });
   } catch (error) {
     if (error.code == 11000) {
-      return res.send({
+      return res.status(400).send({
         code: 400,
         status: "failure",
         error: "User already exist",
@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
     }
     return res.send(error);
   }
-  return res.send({
+  return res.status(200).send({
     code: 200,
     status: "success",
     message: "signup success",
@@ -30,6 +30,7 @@ exports.signup = async (req, res) => {
 exports.logout = async (req, res) => {
   res
     .clearCookie("token")
+    .status(200)
     .send({ code: 200, status: "success", message: "logout success" });
 };
 
@@ -37,7 +38,9 @@ exports.signin = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      return res.send({ error: "email/password cannot be emppty" });
+      return res
+        .status(400)
+        .send({ message: "email/password cannot be emppty" });
     }
     const token = await User.matchPasswordAndGenerateToken(email, password);
     const cookieOptions = {
@@ -45,13 +48,13 @@ exports.signin = async (req, res) => {
       secure: true, // Recommended for cookies transmitted over HTTPS
       sameSite: "None", // Allow the cookie to be sent with cross-site requests
     };
-    return res.cookie("token", token, cookieOptions).send({
+    return res.cookie("token", token, cookieOptions).status(200).send({
       code: 200,
       status: "success",
       message: "signin success",
     });
   } catch (error) {
-    return res.send({
+    return res.status(400).send({
       code: 400,
       status: "failure",
       error: "Incorrect Email or Password",
@@ -63,8 +66,10 @@ exports.todoPost = async (req, res) => {
   try {
     var { title, category, summary, state, sys_id } = req.body;
     if ((!title || !category || !summary) && !sys_id) {
-      return res.send({
-        error:
+      return res.status(400).send({
+        code: 400,
+        status: "success",
+        message:
           "please fill all the mandatory fields (title,category,summary,state)",
       });
     }
@@ -89,21 +94,21 @@ exports.todoPost = async (req, res) => {
                   },
                 })
                 .then(() => {
-                  return res.send({
+                  return res.status(200).send({
                     code: 200,
                     status: "success",
                     message: "todo updated",
                   });
                 });
             } else {
-              return res.send({
+              return res.status(200).send({
                 code: 200,
                 status: "success",
                 message: "data up-to-date",
               });
             }
           } else {
-            return res.send({
+            return res.status(202).send({
               code: 202,
               status: "failure",
               error: "ID may not be empty",
@@ -111,7 +116,7 @@ exports.todoPost = async (req, res) => {
           }
         })
         .catch((e) => {
-          return res.send({
+          return res.status(400).send({
             code: 400,
             status: "failure",
             error: e,
@@ -128,14 +133,14 @@ exports.todoPost = async (req, res) => {
       await createTodo
         .save()
         .then(async () => {
-          return res.send({
+          return res.status(200).send({
             code: 200,
             status: "success",
             message: "todo added successfully",
           });
         })
         .catch((e) => {
-          return res.send({
+          return res.status(400).send({
             code: 400,
             status: "failure",
             error: e,
@@ -143,7 +148,7 @@ exports.todoPost = async (req, res) => {
         });
     }
   } catch (e) {
-    return res.send({
+    return res.status(401).send({
       coed: 401,
       status: "failure",
       error: "error" + e,
