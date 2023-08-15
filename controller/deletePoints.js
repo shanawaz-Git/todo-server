@@ -1,12 +1,11 @@
 "use strict";
-const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 
 exports.deletetodo = async (req, res) => {
   try {
     var { sys_id } = req.body;
     await todo
-      .find({ _id: new Object(sys_id) })
+      .findOneAndRemove({ _id: sys_id })
       .then(async (deletedDocument) => {
         if (deletedDocument) {
           return res.status(200).send({
