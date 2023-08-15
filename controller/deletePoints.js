@@ -9,6 +9,7 @@ exports.deletetodo = async (req, res) => {
     todo
       .findOneAndDelete({ _id: sys_id })
       .then((deletedDocument) => {
+        console.log(deletedDocument);
         if (deletedDocument) {
           return res.status(200).send({
             code: 200,
