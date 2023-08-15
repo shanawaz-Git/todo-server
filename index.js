@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 app.use("/", getRoute.routes);
 app.use("/post", postRoute.routes);
 // app.use("/put", putRoute.routes);
-// app.use("/delete", deleteRoute.routes);
+app.use("/delete", deleteRoute.routes);
 //----
 app.listen(PORT, () => {
   console.log(`the server is running in locahost:${PORT}`);
