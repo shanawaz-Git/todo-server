@@ -6,7 +6,7 @@ exports.deletetodo = async (req, res) => {
   try {
     var { sys_id } = req.body;
     await todo
-      .findOne({ _id: sys_id })
+      .find({ _id: new Object(sys_id) })
       .then(async (deletedDocument) => {
         if (deletedDocument) {
           return res.status(200).send({
