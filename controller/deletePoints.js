@@ -5,6 +5,7 @@ const { todo } = require("../schemas/todosSchema");
 exports.deletetodo = async (req, res) => {
   try {
     var { sys_id } = req.body;
+    console.log(sys_id);
     todo
       .findOneAndDelete({ _id: sys_id })
       .then((deletedDocument) => {
