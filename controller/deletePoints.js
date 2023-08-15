@@ -6,7 +6,7 @@ exports.deletetodo = async (req, res) => {
   try {
     var { sys_id } = req.body;
     todo
-      .findByIdAndDelete(new Object(sys_id))
+      .findByIdAndDelete(sys_id)
       .then((deletedDocument) => {
         if (deletedDocument) {
           return res.status(200).send({
