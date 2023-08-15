@@ -6,19 +6,19 @@ exports.deletetodo = async (req, res) => {
   try {
     var { sys_id } = req.body;
     await todo
-      .findOneAndDelete({ _id: sys_id })
+      .findOne({ _id: sys_id })
       .then(async (deletedDocument) => {
         if (deletedDocument) {
           return res.status(200).send({
             code: 200,
             status: "success",
-            message: "deletion success",
+            message: deletedDocument,
           });
         } else {
           return res.status(201).send({
             code: 201,
             status: "Failure",
-            message: "nothing to delete",
+            message: deletedDocument,
           });
         }
       })
