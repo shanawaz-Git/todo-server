@@ -167,7 +167,6 @@ exports.todoPost = async (req, res) => {
 exports.ITSMDailyStatus = async (req, res) => {
   try {
     var { file } = req;
-    console.log(file);
     if (file) {
       await ITSM.find({ fileName: "response.json" }).then(async (data) => {
         if (data.length != 0) {
