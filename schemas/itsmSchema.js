@@ -6,8 +6,19 @@ const Schema = mongoose.Schema;
 const itsmSchema = new Schema(
   {
     payload: {
-      type: JSON,
+      type: String,
       required: true,
+      trim: true,
+    },
+    fileName: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
+    key: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true }

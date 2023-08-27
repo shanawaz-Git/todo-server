@@ -2,6 +2,7 @@
 const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
+const { response } = require("express");
 
 exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -165,34 +166,70 @@ exports.todoPost = async (req, res) => {
 
 exports.ITSMDailyStatus = async (req, res) => {
   try {
-    var { payload } = req.body;
-    if (!payload) {
+    var { file } = req.body;
+    console.log(file);
+    if (!file) {
       return res.status(400).send({
         code: 400,
         status: "success",
-        message: "please fill all the mandatory fields (paylaod)",
+        message: "file is mandatory ",
+      });
+    } else {
+      await ITSM.find({ fileName: "response.json" }).then(async (data) => {
+        if (data.length != 0) {
+          const aws = require("aws-sdk");
+          aws.config.update({
+            accessKeyId: process.env.AWS_ACCESS_KEY,
+            secretAccessKey: process.env.AWS_SECRET_KEY,
+            region: process.env.AWS_BUCKET_REGION,
+          });
+          var s3 = new aws.S3();
+          var params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: data[0].key,
+          };
+          s3.deleteObject(params, (err, data) => {
+            if (err) console.log(err, err.stack); // error
+            else console.log(data); // deleted
+          });
+          await ITSM.updateOne(data[0], {
+            $set: {
+              payload: file.location,
+              key: file.key,
+              fileName: "response.json",
+            },
+          }).then(async () => {
+            return res.status(200).send({
+              code: 200,
+              status: "Success",
+              message: `Application updated`,
+            });
+          });
+        } else {
+          const newApplication = new jobApplication({
+            payload: file.location,
+            key: file.key,
+            fileName: "response.json",
+          });
+          await newApplication
+            .save()
+            .then(async () => {
+              return res.status(200).send({
+                code: 200,
+                status: "Success",
+                message: `Application is successfully submitted`,
+              });
+            })
+            .catch((e) => {
+              return res.status(201).send({
+                code: 201,
+                status: "Failure",
+                message: "Something went wrong, please try again\n" + e,
+              });
+            });
+        }
       });
     }
-    var jsonpayload = JSON.parse(payload);
-    const createITSMresponse = new ITSM({
-      payload: jsonpayload,
-    });
-    await createITSMresponse
-      .save()
-      .then(async () => {
-        return res.status(200).send({
-          code: 200,
-          status: "success",
-          message: "response added successfully",
-        });
-      })
-      .catch((e) => {
-        return res.status(400).send({
-          code: 400,
-          status: "failure",
-          message: e,
-        });
-      });
   } catch (error) {
     return res.status(401).send({
       coed: 401,
