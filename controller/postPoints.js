@@ -168,7 +168,7 @@ exports.ITSMDailyStatus = async (req, res) => {
   try {
     var { file } = req.body;
     console.log(file);
-    if (!file) {
+    if (file == {}) {
       return res.status(400).send({
         code: 400,
         status: "success",
