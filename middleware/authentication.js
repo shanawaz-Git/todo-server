@@ -10,7 +10,7 @@ function checkForAuthenticationCookie(cookieName) {
       currentPath === "/post/signup" ||
       currentPath === "/post/logout" ||
       currentPath === "/" ||
-      currentPath === "/getitsmresponse"
+      currentPath === "/itsmresponse"
     ) {
       return next(); // Skip token validation for signin and signup
     }
