@@ -166,15 +166,9 @@ exports.todoPost = async (req, res) => {
 
 exports.ITSMDailyStatus = async (req, res) => {
   try {
-    var { file } = req.body;
+    var { file } = req;
     console.log(file);
-    if (file == {}) {
-      return res.status(400).send({
-        code: 400,
-        status: "success",
-        message: "file is mandatory ",
-      });
-    } else {
+    if (file) {
       await ITSM.find({ fileName: "response.json" }).then(async (data) => {
         if (data.length != 0) {
           const aws = require("aws-sdk");
@@ -228,6 +222,12 @@ exports.ITSMDailyStatus = async (req, res) => {
               });
             });
         }
+      });
+    } else {
+      return res.status(400).send({
+        code: 400,
+        status: "success",
+        message: "file is mandatory ",
       });
     }
   } catch (error) {
