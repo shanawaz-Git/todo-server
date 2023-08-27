@@ -182,7 +182,7 @@ exports.ITSMDailyStatus = async (req, res) => {
             Key: data[0].key,
           };
           s3.deleteObject(params, (err, data) => {
-            if (err) console.log(err, err.stack); // error
+            if (err) console.log(err); // error
             else console.log(data); // deleted
           });
           await ITSM.updateOne(data[0], {
@@ -196,6 +196,7 @@ exports.ITSMDailyStatus = async (req, res) => {
               code: 200,
               status: "Success",
               message: `Application updated`,
+              file: file.location,
             });
           });
         } else {
@@ -211,6 +212,7 @@ exports.ITSMDailyStatus = async (req, res) => {
                 code: 200,
                 status: "Success",
                 message: `Application is successfully submitted`,
+                file: file.location,
               });
             })
             .catch((e) => {
