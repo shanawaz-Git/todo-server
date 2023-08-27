@@ -5,6 +5,7 @@ const { validateToken } = require("../helpers/authentication");
 function checkForAuthenticationCookie(cookieName) {
   return (req, res, next) => {
     const currentPath = req.path;
+    console.log(currentPath);
     if (
       currentPath === "/post/signin" ||
       currentPath === "/post/signup" ||
