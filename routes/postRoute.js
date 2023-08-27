@@ -9,7 +9,7 @@ const {
   ITSMDailyStatus,
 } = require("../controller/postPoints");
 //----
-const upload = require("../middleware/aws-S3");
+const upload = require("../middleware/awss3");
 //----
 const postRoute = express.Router();
 //----
