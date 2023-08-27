@@ -184,7 +184,13 @@ exports.ITSMDailyStatus = async (req, res) => {
           s3.deleteObject(params, (err, data) => {
             if (err) console.log(err); // error
             else console.log(data); // deleted
-          });
+          })
+            .then((data) => {
+              console.log("deleted " + data);
+            })
+            .catch((e) => {
+              console.log("err " + e);
+            });
           await ITSM.updateOne(data[0], {
             $set: {
               payload: file.location,
