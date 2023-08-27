@@ -7,6 +7,6 @@ const getRoute = express.Router();
 //----
 getRoute.get("/", home);
 getRoute.get("/todoget", todoget);
-getRoute.get("/getITSMresponse", getITSMresponse);
+getRoute.get("/getitsmresponse", getITSMresponse);
 //----
 module.exports = { routes: getRoute };
