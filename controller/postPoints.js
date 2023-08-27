@@ -1,6 +1,7 @@
 "use strict";
 const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
+const { ITSM } = require("../schemas/itsmSchema");
 
 exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -158,6 +159,45 @@ exports.todoPost = async (req, res) => {
       coed: 401,
       status: "failure",
       message: "error" + e,
+    });
+  }
+};
+
+exports.ITSMDailyStatus = async (req, res) => {
+  try {
+    var { payload } = req.body;
+    if (!payload) {
+      return res.status(400).send({
+        code: 400,
+        status: "success",
+        message: "please fill all the mandatory fields (paylaod)",
+      });
+    }
+    var jsonpayload = JSON.parse(payload);
+    const createITSMresponse = new ITSM({
+      payload: jsonpayload,
+    });
+    await createITSMresponse
+      .save()
+      .then(async () => {
+        return res.status(200).send({
+          code: 200,
+          status: "success",
+          message: "response added successfully",
+        });
+      })
+      .catch((e) => {
+        return res.status(400).send({
+          code: 400,
+          status: "failure",
+          message: e,
+        });
+      });
+  } catch (error) {
+    return res.status(401).send({
+      coed: 401,
+      status: "failure",
+      message: "error" + error,
     });
   }
 };
