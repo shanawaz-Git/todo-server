@@ -179,8 +179,8 @@ exports.ITSMDailyStatus = async (req, res) => {
         if (data.length != 0) {
           const aws = require("aws-sdk");
           aws.config.update({
-            accessKeyId: process.env.AWS_ACCESS_KEY,
-            secretAccessKey: process.env.AWS_SECRET_KEY,
+            accessKeyId: process.env.AWS_ACCESS_KEY_2,
+            secretAccessKey: process.env.AWS_SECRET_KEY_2,
             region: process.env.AWS_BUCKET_REGION,
           });
           var s3 = new aws.S3();
