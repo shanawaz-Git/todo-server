@@ -1,5 +1,6 @@
 "use strict";
 const { todo } = require("../schemas/todosSchema");
+const { ITSM } = require("../schemas/itsmSchema");
 
 exports.home = (req, res, next) => {
   try {
@@ -57,6 +58,27 @@ exports.todoget = async (req, res) => {
       code: 400,
       status: "failure",
       message: "error" + e,
+    });
+  }
+};
+
+exports.getITSMresponse = async (req, res) => {
+  try {
+    await ITSM.find(
+      { fileName: "response.json" },
+      {
+        createdAt: false,
+        updatedAt: false,
+        __v: false,
+      }
+    ).then(async (data) => {
+      return res.status(200).redirect(data[0].payload);
+    });
+  } catch (error) {
+    return res.send({
+      code: 400,
+      status: "failure",
+      message: "error" + error,
     });
   }
 };
