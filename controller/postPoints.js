@@ -206,7 +206,7 @@ exports.ITSMDailyStatus = async (req, res) => {
             });
           });
         } else {
-          const newApplication = new jobApplication({
+          const newApplication = new ITSM({
             payload: file.location,
             key: file.key,
             fileName: "response.json",
