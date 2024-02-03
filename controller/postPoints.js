@@ -244,10 +244,20 @@ exports.ITSMDailyStatus = async (req, res) => {
 
 exports.getRandomData = async(req,res)=>{
   try {
+    const configuration = new Configuration({
+      apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
+    });
+    const openai = new OpenAIApi(configuration);
+    let prompt = getPrompt(req.body.summary);
+    const completion = await openai.createCompletion({
+      model: "text-davinci-001",
+      prompt: prompt,
+      max_tokens: 100,
+    });
   return res.status(200).send({
     code: 200,
     status: "success",
-    message: this.openAIbot(req.body.summary),
+    message: completion.data.choices[0].text,
   });
 } catch (error) {
   return res.status(400).send({
@@ -258,16 +268,16 @@ exports.getRandomData = async(req,res)=>{
 }
 }
 
-const openAIbot = async (promptText) => {
-  const configuration = new Configuration({
-    apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
-  });
-  const openai = new OpenAIApi(configuration);
-  let prompt = getPrompt(promptText);
-  const completion = await openai.createCompletion({
-    model: "text-davinci-001",
-    prompt: prompt,
-    max_tokens: 100,
-  });
-  return completion.data.choices[0].text;
-};
+// const openAIbot = async (promptText) => {
+//   const configuration = new Configuration({
+//     apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
+//   });
+//   const openai = new OpenAIApi(configuration);
+//   let prompt = getPrompt(promptText);
+//   const completion = await openai.createCompletion({
+//     model: "text-davinci-001",
+//     prompt: prompt,
+//     max_tokens: 100,
+//   });
+//   return completion.data.choices[0].text;
+// };
