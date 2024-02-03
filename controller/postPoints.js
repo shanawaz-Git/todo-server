@@ -248,7 +248,7 @@ exports.getRandomData = async(req,res)=>{
       apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
     });
     const openai = new OpenAIApi(configuration);
-    let prompt = getPrompt(req.body.summary);
+    let prompt = req.body.summary;
     const completion = await openai.createCompletion({
       model: "text-davinci-001",
       prompt: prompt,
