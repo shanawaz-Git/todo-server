@@ -243,11 +243,19 @@ exports.ITSMDailyStatus = async (req, res) => {
 };
 
 exports.getRandomData = async(req,res)=>{
+  try {
   return res.status(200).send({
     code: 200,
     status: "success",
     message: this.openAIbot(req.body.summary),
   });
+} catch (error) {
+  return res.status(400).send({
+    code: 400,
+    status: "failure",
+    message: 'error'+error,
+  });
+}
 }
 
 const openAIbot = async (promptText) => {
