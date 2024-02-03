@@ -248,7 +248,7 @@ exports.getRandomData = async(req,res)=>{
     const openai=new OpenAI();
     const completion=await openai.chat.completions.create({
       messages:[{role:"system",content:"hello, give me a random 5 digit number"}],
-      model:"text-davinci-003",
+      model:"gpt-4-32k",
     })
     // const configuration = new Configuration({
     //   apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
