@@ -3,7 +3,8 @@ const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
 const { response } = require("express");
-const { Configuration, OpenAIApi } = require("openai");
+// const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require("openai");
 
 
 exports.signup = async (req, res) => {
@@ -244,20 +245,25 @@ exports.ITSMDailyStatus = async (req, res) => {
 
 exports.getRandomData = async(req,res)=>{
   try {
-    const configuration = new Configuration({
-      apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
-    });
-    const openai = new OpenAIApi(configuration);
-    let prompt = req.body.summary;
-    const completion = await openai.createCompletion({
-      model: "text-davinci-001",
-      prompt: prompt,
-      max_tokens: 100,
-    });
+    const openai=new OpenAI();
+    const completion=await openai.chat.completions.create({
+      messages:[{role:"system",content:"hello, give me a random 5 digit number"}],
+      model:"gpt-3.5-turbo",
+    })
+    // const configuration = new Configuration({
+    //   apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
+    // });
+    // const openai = new OpenAIApi(configuration);
+    // let prompt = req.body.summary;
+    // const completion = await openai.createCompletion({
+    //   model: "text-davinci-001",
+    //   prompt: prompt,
+    //   max_tokens: 100,
+    // });
   return res.status(200).send({
     code: 200,
     status: "success",
-    message: completion.data.choices[0].text,
+    message: completion.choices[0],
   });
 } catch (error) {
   return res.status(400).send({
