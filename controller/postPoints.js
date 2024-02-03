@@ -3,6 +3,8 @@ const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
 const { response } = require("express");
+const { Configuration, OpenAIApi } = require("openai");
+
 
 exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -238,4 +240,26 @@ exports.ITSMDailyStatus = async (req, res) => {
       message: "error" + error,
     });
   }
+};
+
+exports.getRandomData = async(req,res)=>{
+  return res.status(200).send({
+    code: 200,
+    status: "success",
+    message: this.openAIbot(req.body.summary),
+  });
+}
+
+const openAIbot = async (promptText) => {
+  const configuration = new Configuration({
+    apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
+  });
+  const openai = new OpenAIApi(configuration);
+  let prompt = getPrompt(promptText);
+  const completion = await openai.createCompletion({
+    model: "text-davinci-001",
+    prompt: prompt,
+    max_tokens: 100,
+  });
+  return completion.data.choices[0].text;
 };
