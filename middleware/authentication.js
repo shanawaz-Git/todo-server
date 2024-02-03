@@ -10,7 +10,7 @@ function checkForAuthenticationCookie(cookieName) {
       currentPath === "/post/signin" ||
       currentPath === "/post/signup" ||
       currentPath === "/post/logout" ||
-      currentPath === "/aitest" ||
+      currentPath === "/post/aitest" ||
       currentPath === "/itsmresponse"||
       currentPath==='/'
     ) {
