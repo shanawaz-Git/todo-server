@@ -4,8 +4,7 @@ const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
 const { response } = require("express");
 // const { Configuration, OpenAIApi } = require("openai");
-const OpenAI = require("openai");
-
+const { Configuration, OpenAIApi } = require("openai");
 
 exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -243,46 +242,36 @@ exports.ITSMDailyStatus = async (req, res) => {
   }
 };
 
-exports.getRandomData = async(req,res)=>{
+exports.getRandomData = async (req, res) => {
   try {
-    const openai=new OpenAI();
-    const completion=await openai.chat.completions.create({
-      messages:[{role:"system",content:"hello, give me a random 5 digit number"}],
-      model:"davinci-002",
-    })
-    // const configuration = new Configuration({
-    //   apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
-    // });
-    // const openai = new OpenAIApi(configuration);
-    // let prompt = req.body.summary;
-    // const completion = await openai.createCompletion({
-    //   model: "text-davinci-001",
-    //   prompt: prompt,
-    //   max_tokens: 100,
-    // });
-  return res.status(200).send({
-    code: 200,
-    status: "success",
-    message: completion.choices[0],
-  });
-} catch (error) {
-  return res.status(400).send({
-    code: 400,
-    status: "failure",
-    message: 'error'+error,
-  });
-}
-}
+    const configuration = new Configuration({
+      apiKey: process.env.OPEN_AI,
+    });
+    const openai = new OpenAIApi(configuration);
+    const completion = await openai.createCompletion({
+      model: "text-davinci-001",
+      prompt: "how are you",
+      max_tokens: 100,
+    });
+    console.log(completion.choices[0]);
+    return res.status(200).send({
+      code: 200,
+      status: "success",
+      message: completion.choices[0],
+    });
+  } catch (error) {
+    return res.status(400).send({
+      code: 400,
+      status: "failure",
+      message: "error" + error,
+    });
+  }
+};
 
-// const openAIbot = async (promptText) => {
-//   const configuration = new Configuration({
-//     apiKey: 'sk-ojAmuNEOMZsJ1Tni6s38T3Blb',
-//   });
-//   const openai = new OpenAIApi(configuration);
-//   let prompt = getPrompt(promptText);
+// const openAIbot = async () => {
 //   const completion = await openai.createCompletion({
 //     model: "text-davinci-001",
-//     prompt: prompt,
+//     prompt: "how are you",
 //     max_tokens: 100,
 //   });
 //   return completion.data.choices[0].text;
