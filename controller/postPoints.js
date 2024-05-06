@@ -2,6 +2,7 @@
 const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
+const { expenses } = require("../schemas/expensesSchema");
 const { response } = require("express");
 // const { Configuration, OpenAIApi } = require("openai");
 const { Configuration, OpenAIApi } = require("openai");
@@ -268,11 +269,22 @@ exports.getRandomData = async (req, res) => {
   }
 };
 
-// const openAIbot = async () => {
-//   const completion = await openai.createCompletion({
-//     model: "text-davinci-001",
-//     prompt: "how are you",
-//     max_tokens: 100,
-//   });
-//   return completion.data.choices[0].text;
-// };
+exports.addExpense = async (req, res) => {
+  try {
+    var { name, amtIn, amtOut, amount, time_stamp } = req.body;
+    if (!name || !amount || (amtIn == false && amtOut == false)) {
+      return res.status(400).send({
+        code: 400,
+        status: "success",
+        message:
+          "please fill all the mandatory fields (name,amt in/out,amount)",
+      });
+    }
+  } catch (error) {
+    return res.status(401).send({
+      coed: 401,
+      status: "failure",
+      message: "error" + e,
+    });
+  }
+};
