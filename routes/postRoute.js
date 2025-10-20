@@ -9,6 +9,8 @@ const {
   ITSMDailyStatus,
   getRandomData,
   addExpense,
+  addNotes,
+  addNotesUser,
 } = require("../controller/postPoints");
 //----
 const upload = require("../middleware/awss3");
@@ -22,6 +24,8 @@ postRoute.post("/todopost", todoPost);
 postRoute.post("/ITSMresponse", upload.single("file"), ITSMDailyStatus);
 postRoute.post("/aitest", getRandomData);
 postRoute.post("/exp/add", addExpense);
+postRoute.post("/notestaker/add", addNotes);
+postRoute.post("/notestaker/regUser", addNotesUser);
 
 //----
 module.exports = { routes: postRoute };

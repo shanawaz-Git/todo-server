@@ -3,7 +3,9 @@ const User = require("../schemas/userSchema");
 const { todo } = require("../schemas/todosSchema");
 const { ITSM } = require("../schemas/itsmSchema");
 const { expenses } = require("../schemas/expensesSchema");
+const { notes, notesUsers } = require("../schemas/notesSchema");
 const { response } = require("express");
+const crypto = require("crypto");
 // const { Configuration, OpenAIApi } = require("openai");
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -285,6 +287,149 @@ exports.addExpense = async (req, res) => {
       coed: 401,
       status: "failure",
       message: "error" + e,
+    });
+  }
+};
+
+exports.addNotesUser = async (req, res, next) => {
+  try {
+    var { userName, pin, loginMode } = req.body;
+
+    if (userName && pin) {
+      if (loginMode) {
+        //login
+        const validUser = await notesUsers.findOne({
+          userName: userName,
+          pin: pin,
+        });
+        if (validUser) {
+          var todayDate = new Date().toLocaleDateString("en-CA", {
+            timeZone: "Asia/Kolkata",
+          });
+          const HMAC_SECRET = process.env.GLOBALPASSWORD;
+          const h = crypto
+            .createHmac("sha256", HMAC_SECRET)
+            .update(`${userName}:${todayDate}`)
+            .digest("hex");
+          // Take first 8 hex chars -> 32-bit int, then modulo 100000
+          const intVal = parseInt(h.slice(0, 8), 16);
+          const num = intVal % 100000;
+          const passKey = String(num).padStart(5, "0");
+          res.status(200).send({
+            code: 200,
+            success: true,
+            passKey: passKey,
+            message: "User Authenticated Successfully!!",
+          });
+        } else {
+          res.status(400).send({
+            code: 400,
+            success: false,
+            message: "User Failed to Authenticate!!!",
+          });
+        }
+      } else {
+        const userExist = await notesUsers.findOne({ userName: userName });
+        if (userExist) {
+          res.status(400).send({
+            code: 400,
+            success: true,
+            message: "User Already Exist!!",
+          });
+        } else {
+          const createNoteUser = new notesUsers({
+            userName: userName,
+            pin: pin,
+          });
+          console.log("here 96");
+          await createNoteUser
+            .save()
+            .then(async () => {
+              res.status(200).send({
+                code: 200,
+                status: "success",
+                message: "User Created Successfully",
+              });
+            })
+            .catch((e) => {
+              res.status(400).send({
+                code: 400,
+                status: "failure",
+                message: e,
+              });
+            });
+        }
+      }
+    } else {
+      res.status(400).send({
+        code: 400,
+        status: "success",
+        message: "please fill all the mandatory fields (UserName, PIN)",
+      });
+    }
+  } catch (error) {
+    res.status(401).send({
+      coed: 401,
+      status: "failure",
+      message: "error" + error,
+    });
+  }
+};
+
+exports.addNotes = async (req, res) => {
+  try {
+    var { name, cat, content, state, time_stamp } = req.body;
+    const { noteId } = req.body;
+    var reqbody = Object.keys(req.body);
+    if (noteId) {
+      const note = await notes.findById(noteId);
+      if (!note) {
+        res.status(404).json({ message: "Note not found" });
+      }
+
+      note.state = state;
+      await note.save();
+
+      res.json({ success: true, message: "Note state updated", note });
+    } else {
+      if (!name || !cat || !content) {
+        res.status(400).send({
+          code: 400,
+          status: "success",
+          message:
+            "please fill all the mandatory fields (name, category, content)",
+        });
+      } else {
+        const createNote = new notes({
+          name: name,
+          cat: cat,
+          content: content,
+          state: state,
+          time_stamp: time_stamp,
+        });
+        await createNote
+          .save()
+          .then(async () => {
+            res.status(200).send({
+              code: 200,
+              status: "success",
+              message: "notes added successfully",
+            });
+          })
+          .catch((e) => {
+            res.status(400).send({
+              code: 400,
+              status: "failure",
+              message: e,
+            });
+          });
+      }
+    }
+  } catch (error) {
+    res.status(401).send({
+      coed: 401,
+      status: "failure",
+      message: "error" + error,
     });
   }
 };
